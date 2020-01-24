@@ -1,0 +1,15 @@
+version: '3'
+services:
+  test:
+    build: ./test-container/.
+  web:
+    build: ./nginx-sidecar/.
+    links:
+      - test:container
+    ports:
+      - 8080:80
+    environment:
+      - NGINX_LISTEN_PORT=80
+      - NGINX_PROXY_HOST=container
+      - NGINX_PROXY_PORT=8080
+      - NGINX_REWRITE=^/api/v1/(.*)
